@@ -50,15 +50,23 @@ def get_bundle_identifiers():
     os.chdir("/System/Library/PreferencePanes/")
     for directory in glob.glob("*.prefPane"):
         system_path = "/System/Library/PreferencePanes/" + directory.strip() + "/Contents/Info.plist"
-        system_panes[directory.split('.')[0]] = subprocess.check_output(["/usr/bin/defaults", "read", system_path,
+        # Handle exception related to invalid or corrupted Info.plist
+        try:
+            system_panes[directory.split('.')[0]] = subprocess.check_output(["/usr/bin/defaults", "read", system_path,
                                                                          "CFBundleIdentifier"]).rstrip()
+        except subprocess.CalledProcessError:
+            print(system_path + " did not contain a CFBundleIdentifier key or was corrupt.")
 
     # Get the available 3rd party preference panes
     os.chdir("/Library/PreferencePanes/")
     for directory in glob.glob("*.prefPane"):
         other_path = "/Library/PreferencePanes/" + directory.strip() + "/Contents/Info.plist"
-        other_panes[directory.split('.')[0]] = subprocess.check_output(["/usr/bin/defaults", "read", other_path,
+        # Handle exception related to invalid or corrupted Info.plist
+        try:
+            other_panes[directory.split('.')[0]] = subprocess.check_output(["/usr/bin/defaults", "read", other_path,
                                                                         "CFBundleIdentifier"]).rstrip()
+        except subprocess.CalledProcessError:
+            print(other_path + " did not contain a CFBundleIdentifier key or was corrupt.")
 
 # Print a list of system and 3rd party preference
 def list_bundle_identifiers():
