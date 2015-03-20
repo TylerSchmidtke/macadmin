@@ -3,7 +3,7 @@
 # PrefPaneUtil.py
 # Author: Tyler Schmidtke
 # Version: 1.0
-# Date: 3/19/2015
+# Date: 3/20/2015
 # Description: Tool for locking/unlocking OS X System Preferences Panes. Hides any locked panes from view.
 # Tested: OS X 10.10
 
@@ -21,6 +21,28 @@ locked_panes = CoreFoundation.CFPreferencesCopyValue("DisabledPreferencePanes", 
 # Set dictionaries for available preference panes
 system_panes = {}
 other_panes = {}
+
+
+def print_help():
+    print("""
+This tool is designed to lock/unlock OS X System Preference Panes. In addition to
+locking the pane, it also hides the pane from view. Preference panes are specified
+by their Bundle Identifier, found in the Info.plist file found in each .prefPane directory.
+Available arguments are as follows:
+
+ -h, --help  : Print this help page
+ --list      : List available preference panes
+ --locked    : List currently locked preference panes
+ --unlock    : Unlock a list of preference pane bundle identifiers. Example:
+               ./PrefPaneUtil.py --unlock "com.apple.preference.sound, com.apple.prefs.backup"
+
+ --lock      : Lock a list of preference pane bundle identifiers. Example:
+               ./PrefPaneUtil.py --lock "com.apple.preference.sound, com.apple.prefs.backup"
+
+ --restore   : Restore the list of preference panes locked before running --unlockall
+ --unlockall : Unlock all preference panes
+    """)
+
 
 # Retrieve available panes for listing and verifying lock/unlock bundle identifiers.
 def get_bundle_identifiers():
@@ -222,26 +244,6 @@ def restore_all():
     # Notify
     print("Preference pane locks restored from '/tmp/prefpanes.restore'. Restore file has been deleted.")
 
-def help():
-    print("""
-This tool is designed to lock/unlock OS X System Preference Panes. In addition to
-locking the pane, it also hides the pane from view. Preference panes are specified
-by their Bundle Identifier, found in the Info.plist file found in each .prefPane directory.
-Available arguments are as follows:
-
- -h, --help  : Print this help page
- --list      : List available preference panes
- --locked    : List currently locked preference panes
- --unlock    : Unlock a list of preference pane bundle identifiers. Example:
-               ./PrefPaneUtil.py --unlock "com.apple.preference.sound, com.apple.prefs.backup"
-
- --lock      : Lock a list of preference pane bundle identifiers. Example:
-               ./PrefPaneUtil.py --lock "com.apple.preference.sound, com.apple.prefs.backup"
-
- --restore   : Restore the list of preference panes locked before running --unlockall
- --unlockall : Unlock all preference panes
-    """)
-
 # Process arguments and execute necessary functions
 if __name__ == '__main__':
 
@@ -251,7 +253,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     elif len(sys.argv) ==  1:
-        help()
+        print_help()
         sys.exit(0)
 
     elif sys.argv[1] == "--list":
@@ -275,4 +277,4 @@ if __name__ == '__main__':
         unlock_all()
 
     else:
-        help()
+        print_help()
