@@ -143,17 +143,14 @@ def lock_unlock_panes():
     all_panes = system_panes.copy()
     all_panes.update(other_panes)
     valid_id = {}
-    invalid_id = False
     for pane in panes_to_modify:
         valid_id[pane] = False
         if pane in all_panes.values():
             valid_id[pane] = True
     for key, value in valid_id.iteritems():
         if not value:
-            print(key + " is not a valid bundle identifier")
-            invalid_id = True
-    if invalid_id:
-        sys.exit(1)
+            print(key + " is not a valid bundle identifier, removing")
+            panes_to_modify.remove(key)
 
      # Create a mutable copy of the currently locked panes
     new_locked_panes = NSMutableArray.alloc().initWithArray_(locked_panes)
