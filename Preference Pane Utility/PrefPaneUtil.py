@@ -101,12 +101,11 @@ def list_current_locked():
             print(pane)
         print("-" * 45)
 
-"""
-Verify the current user's com.apple.systempreferences.plist does not contain DisabledPreferencePanes
-or HiddenPreferencePane keys. These will override the settings in
-/Library/Preferences/com.apple.systempreferences.plist. I don't know of a way to modify another user's
-preferences (other than the one running the script) via CFPrefs, so we'll run defaults as the current user.
-"""
+
+# Verify the current user's com.apple.systempreferences.plist does not contain DisabledPreferencePanes
+# or HiddenPreferencePane keys. These will override the settings in
+# /Library/Preferences/com.apple.systempreferences.plist. I don't know of a way to modify another user's
+# preferences (other than the one running the script) via CFPrefs, so we'll run defaults as the current user.
 
 
 def sanity_check():
